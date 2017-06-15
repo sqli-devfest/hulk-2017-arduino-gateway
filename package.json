@@ -1,0 +1,13 @@
+{
+  "name": "hulk-arduino-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "mqtt": "^2.8.2",
+    "serialport": "4.0.7"
+  },
+  "devDependencies": {}
+}
