@@ -11,8 +11,11 @@ SerialPort.list(function (err, results) {
             console.log('Arduino detect on ' + device.comName);
             var port = device.comName;
             initUSB(port);
+            return;
         }
     });
+    console.log('No Arduino detected!')
+
 });
 
 var initUSB = function (port) {
@@ -29,6 +32,7 @@ var initUSB = function (port) {
 };
 
 var onSerialOpen = function () {
+    console.log('Port ' + serialPort.port+ ' is open');
     initMQTT();
     serialPort.on('data', onSerialData);
 };
@@ -47,12 +51,13 @@ var initMQTT = function () {
 
 
 var onMQTTConnect = function () {
+    console.log('MQTT is connected');
     mqtt.subscribe('start');
     mqtt.subscribe('stop');
 };
 
 var onMQTTMessage = function (topic, message) {
-    // console.log('MQTT - Message on Topic ' + topic + ' : ' + message);
+    console.log('MQTT - Message on Topic ' + topic + ' : ' + message);
     switch (topic) {
         case 'start':
             playerInProgress = message.toString().replace(/\n/g, '');
