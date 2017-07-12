@@ -44,7 +44,7 @@ var onSerialData = function (data) {
 };
 
 var initMQTT = function () {
-    mqtt = Mqtt.connect('mqtt://localhost');
+    mqtt = Mqtt.connect('mqtt://mqtt');
     mqtt.on('connect', onMQTTConnect);
     mqtt.on('message', onMQTTMessage);
 };
