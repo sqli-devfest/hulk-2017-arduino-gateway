@@ -5,6 +5,14 @@ var mqtt;
 var serialPort;
 var playerInProgress;
 
+const formule = "score*4/100";
+
+// Coeff multiplicateur pour étaler les valeurs de 1 à 10
+var getRank = function (score) {
+    return Math.floor(eval(formule));
+};
+
+
 SerialPort.list(function (err, results) {
     results.forEach(function (device) {
         if (device.manufacturer !== undefined && device.manufacturer.indexOf('Arduino') !== -1) {
@@ -14,8 +22,6 @@ SerialPort.list(function (err, results) {
             return;
         }
     });
-    console.log('No Arduino detected!')
-
 });
 
 var initUSB = function (port) {
@@ -32,15 +38,23 @@ var initUSB = function (port) {
 };
 
 var onSerialOpen = function () {
-    console.log('Port ' + serialPort.port+ ' is open');
+    console.log('Serial port is open');
     initMQTT();
+    serialPort.write('STOP');
     serialPort.on('data', onSerialData);
 };
 
 var onSerialData = function (data) {
+    console.log("Inconimng message on serial port (Arduino): " + data);
+    var score = data.replace('\r', '');
+    var rank = getRank(score);
+    console.log("Score is : " + score)
+    console.log("Rank is : " + rank)
+    serialPort.write(String(rank));
     var message = JSON.parse(playerInProgress);
-    message.game = {score: data.replace('\r', '')};
+    message.game = {"score": score, "rank": rank};
     mqtt.publish('results', JSON.stringify(message));
+    console.log('MQTT - Publish on Topic results: ' + JSON.stringify(message));
 };
 
 var initMQTT = function () {
