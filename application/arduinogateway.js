@@ -16,15 +16,13 @@ var getRank = function (score) {
 SerialPort.list(function (err, results) {
     var arduinoDetected = false;
     results.forEach(function (device) {
-        if (device.manufacturer !== undefined) {
-            console.log(device.manufacturer +' on '+ device.comName);
-            if (device.manufacturer.indexOf('Arduino') !== -1) {
-                console.log('Arduino detect on ' + device.comName);
-                var port = device.comName;
-                arduinoDetected = true;
-                initUSB(port);
-                return;
-            }
+        console.log(device.comName);
+        if (device.comName.indexOf('/dev/ttyACM') !== -1) {
+            console.log('Arduino detect on ' + device.comName);
+            var port = device.comName;
+            arduinoDetected = true;
+            initUSB(port);
+            return;
         }
     });
     if (!arduinoDetected) {
