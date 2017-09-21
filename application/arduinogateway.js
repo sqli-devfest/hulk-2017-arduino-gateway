@@ -16,7 +16,6 @@ var getRank = function (score) {
 SerialPort.list(function (err, results) {
     var arduinoDetected = false;
     results.forEach(function (device) {
-        console.log(device.comName);
         if (device.comName.indexOf('/dev/ttyACM') !== -1) {
             console.log('Arduino detect on ' + device.comName);
             var port = device.comName;
