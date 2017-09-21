@@ -10,4 +10,4 @@ WORKDIR /application
 
 RUN npm install
 
-ENTRYPOINT node arduinogateway.js
+ENTRYPOINT node application/arduinogateway.js
