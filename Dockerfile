@@ -8,6 +8,6 @@ ADD . /application
 
 WORKDIR /application
 
-RUN npm install
+RUN yarn
 
 ENTRYPOINT node application/arduinogateway.js
