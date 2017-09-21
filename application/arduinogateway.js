@@ -14,14 +14,19 @@ var getRank = function (score) {
 
 
 SerialPort.list(function (err, results) {
+    var arduinoDetected = false;
     results.forEach(function (device) {
         if (device.manufacturer !== undefined && device.manufacturer.indexOf('Arduino') !== -1) {
             console.log('Arduino detect on ' + device.comName);
             var port = device.comName;
+            arduinoDetected = true;
             initUSB(port);
             return;
         }
     });
+    if (!arduinoDetected){
+        console.log('No Arduino detected!')
+    }
 });
 
 var initUSB = function (port) {
