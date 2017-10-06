@@ -7,11 +7,13 @@ var playerInProgress;
 
 // Coeff multiplicateur pour étaler les valeurs de 1 à 10
 var getRank = function (score) {
+    console.log("Formule = " + process.env.formule)
     return Math.floor(eval(process.env.formule));
 };
 
 
 SerialPort.list(function (err, results) {
+
     var arduinoDetected = false;
     results.forEach(function (device) {
         if (device.comName.indexOf('/dev/ttyACM') !== -1) {
@@ -52,6 +54,9 @@ var onSerialData = function (data) {
     console.log("Inconimng message on serial port (Arduino): " + data);
     var score = data.replace('\r', '');
     var rank = getRank(score);
+    if (rank > 10) {
+        rank = 10;
+    }
     console.log("Score is : " + score)
     console.log("Rank is : " + rank)
     serialPort.write(String(rank));
