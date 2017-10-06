@@ -5,11 +5,9 @@ var mqtt;
 var serialPort;
 var playerInProgress;
 
-const formule = "score*4/100";
-
 // Coeff multiplicateur pour étaler les valeurs de 1 à 10
 var getRank = function (score) {
-    return Math.floor(eval(formule));
+    return Math.floor(eval(process.env.formule));
 };
 
 
