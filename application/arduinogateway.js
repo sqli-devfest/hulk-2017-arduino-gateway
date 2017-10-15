@@ -3,7 +3,7 @@ var Mqtt = require('mqtt');
 
 var mqtt;
 var serialPort;
-var playerInProgress;
+var playerInProgress = null;
 
 // Coeff multiplicateur pour étaler les valeurs de 1 à 10
 var getRank = function (score) {
@@ -64,6 +64,7 @@ var onSerialData = function (data) {
     message.game = {"score": score, "rank": rank};
     mqtt.publish('results', JSON.stringify(message));
     console.log('MQTT - Publish on Topic results: ' + JSON.stringify(message));
+    playerInProgress = null;
 };
 
 var initMQTT = function () {
@@ -83,8 +84,10 @@ var onMQTTMessage = function (topic, message) {
     console.log('MQTT - Message on Topic ' + topic + ' : ' + message);
     switch (topic) {
         case 'start':
-            playerInProgress = message.toString().replace(/\n/g, '');
-            serialPort.write('START');
+            if (playerInProgress === null) {
+                playerInProgress = message.toString().replace(/\n/g, '');
+                serialPort.write('START');
+            }
             break;
         case 'stop':
             serialPort.write('STOP');
