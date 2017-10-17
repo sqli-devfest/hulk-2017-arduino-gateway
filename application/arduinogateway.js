@@ -60,10 +60,12 @@ var onSerialData = function (data) {
     console.log("Score is : " + score)
     console.log("Rank is : " + rank)
     serialPort.write(String(rank));
-    var message = JSON.parse(playerInProgress);
-    message.game = {"score": score, "rank": rank};
-    mqtt.publish('results', JSON.stringify(message));
-    console.log('MQTT - Publish on Topic results: ' + JSON.stringify(message));
+    setTimeout(function () {
+        var message = JSON.parse(playerInProgress);
+        message.game = {"score": score, "rank": rank};
+        mqtt.publish('results', JSON.stringify(message));
+        console.log('MQTT - Publish on Topic results: ' + JSON.stringify(message));
+    }, 10000)
 };
 
 var initMQTT = function () {
